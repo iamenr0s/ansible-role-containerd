@@ -40,8 +40,9 @@ jobs:
     strategy:
       matrix:
         distro:
+          - almalinux9
           - rockylinux9
-          - fedora39
+          #- fedora39
 
     steps:
       - name: Check out the codebase.
@@ -58,6 +59,7 @@ jobs:
         run: pip3 install ansible molecule molecule-plugins[docker] docker
 
       - name: Run Molecule tests.
+        rootless: false
         run: molecule test
         env:
           PY_COLORS: '1'

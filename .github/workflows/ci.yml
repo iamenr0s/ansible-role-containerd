@@ -13,7 +13,6 @@ defaults:
     working-directory: 'iamenr0s.containerd'
 
 jobs:
-
   lint:
     name: Lint
     runs-on: ubuntu-latest

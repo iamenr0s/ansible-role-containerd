@@ -1,23 +1,22 @@
 ---
-- include_tasks: setup-RedHat.yml
+
+- name: Include OS specific tasks
+  ansible.builtin.include_tasks: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
-- include_tasks: setup-Debian.yml
-  when: ansible_os_family == 'Debian'
-
 - name: Ensure containerd is installed.
-  package:
+  ansible.builtin.package:
     name: "{{ containerd_package }}"
     state: "{{ containerd_package_state }}"
 
 - name: Ensure containerd is started and enabled at boot.
-  service:
+  ansible.builtin.service:
     name: containerd
     state: "{{ containerd_service_state }}"
     enabled: "{{ containerd_service_enabled }}"
 
 - name: Ensure containerd config directory exists.
-  file:
+  ansible.builtin.file:
     path: /etc/containerd
     state: directory
   register: containerd_dir
@@ -29,14 +28,14 @@
   when: containerd_config_default_write
 
 - name: Prepare containerd/config.toml from default config
-  copy:
+  ansible.builtin.copy:
     dest: /tmp/containerd_config.toml
     content: "{{ containerd_config_default.stdout }}"
   when: containerd_config_default_write
   changed_when: false
 
 - name: Set Cgroup driver to systemd
-  lineinfile:
+  ansible.builtin.lineinfile:
     insertafter: '.*\[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options\]$'
     line: '          SystemdCgroup = true'
     state: present
@@ -54,7 +53,7 @@
   changed_when: false
 
 - name: Copy config.toml to /etc/containerd
-  copy:
+  ansible.builtin.copy:
     remote_src: true
     src: /tmp/containerd_config.toml
     dest: /etc/containerd/config.toml
@@ -62,10 +61,10 @@
   when: containerd_config_default_write
 
 - name: Cleanup temporary file
-  file:
+  ansible.builtin.file:
     path: /tmp/containerd_config.toml
     state: absent
   changed_when: false
 
 - name: Ensure containerd is restarted immediately if necessary.
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

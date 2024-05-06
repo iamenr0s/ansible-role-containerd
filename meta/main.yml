@@ -2,25 +2,24 @@
 dependencies: []
 
 galaxy_info:
-  role_name: containerd
-  author: geerlingguy
-  description: containerd.io for Linux.
-  company: "Midwestern Mac, LLC"
-  license: "license (BSD, MIT)"
-  min_ansible_version: 2.10
+  role_name: cri_o
+  author: iamenr0s
+  description: This Ansible Role automates the installation of containerd on Linux systems.
+  license: license (BSD, MIT)
+  min_ansible_version: "2.10"
   platforms:
-    - name: Fedora
+    - name: "EL"
       versions:
-        - all
-    - name: Debian
+        - "8"
+        - "9"
+    - name: "Rocky"
       versions:
-        - stretch
-        - buster
-    - name: Ubuntu
+        - "8.0"
+        - "9.0"
+    - name: "Fedora"
       versions:
-        - xenial
-        - bionic
-        - focal
+        - "38"
+        - "39"
   galaxy_tags:
     - system
     - containers

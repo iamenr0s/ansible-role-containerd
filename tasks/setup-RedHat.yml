@@ -1,11 +1,11 @@
 ---
 - name: Add Docker GPG key.
-  rpm_key:
+  ansible.builtin.rpm_key:
     key: "{{ docker_yum_gpg_key }}"
     state: present
 
 - name: Add Docker repository.
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ docker_yum_repo_url }}"
     dest: '/etc/yum.repos.d/docker-ce.repo'
     owner: root
@@ -13,7 +13,7 @@
     mode: 0644
 
 - name: Configure Docker Nightly repo.
-  ini_file:
+  ansible.builtin.ini_file:
     dest: '/etc/yum.repos.d/docker-ce.repo'
     section: 'docker-ce-nightly'
     option: enabled
@@ -21,6 +21,6 @@
     mode: 0644
 
 - name: Ensure container-selinux is installed.
-  package:
+  ansible.builtin.package:
     name: container-selinux
     state: present

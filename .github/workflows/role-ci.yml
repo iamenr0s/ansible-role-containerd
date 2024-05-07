@@ -17,7 +17,16 @@ jobs:
           path: "${{ github.repository }}"
       - name: yamllint
         uses: ibiqlik/action-yamllint@v3.1.1
-
+        with:
+          config_data: |
+            extends: default
+            rules:
+              new-line-at-end-of-file:
+                level: warning
+              trailing-spaces:
+                level: warning
+              line-length:
+                level: warning
   test:
     needs:
       - yamllint

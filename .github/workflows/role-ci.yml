@@ -20,7 +20,6 @@ jobs:
         with:
           yamllint_strict: false
           yamllint_comment: true
-          yamllint_config_datapath: '{extends: relaxed, rules: {line-length: {max: 120}}}'
   test:
     needs:
       - yamllint

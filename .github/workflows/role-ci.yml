@@ -8,20 +8,22 @@ name: role-ci
       - main
 
 jobs:
-  lint:
+  yamllint:
     runs-on: ubuntu-20.04
     steps:
       - name: checkout
         uses: actions/checkout@v3
         with:
           path: "${{ github.repository }}"
-      - name: molecule
-        uses: robertdebock/molecule-action@6.0.0
+      - name: yamllint
+        uses: karancode/yamllint-github-action@master
         with:
-          command: lint
+          yamllint_strict: false
+          yamllint_comment: true
+          yamllint_config_datapath: '{extends: relaxed, rules: {line-length: {max: 120}}}'
   test:
     needs:
-      - lint
+      - yamllint
     runs-on: ubuntu-20.04
     strategy:
       matrix:

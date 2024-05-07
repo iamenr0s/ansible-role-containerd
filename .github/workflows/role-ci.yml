@@ -16,9 +16,7 @@ jobs:
         with:
           path: "${{ github.repository }}"
       - name: yamllint
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          config_file: .yamllint
+        uses: ibiqlik/action-yamllint@v3.1.1
 
   test:
     needs:

@@ -15,12 +15,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: "${{ github.repository }}"
-      - name: yamllint
-        uses: karancode/yamllint-github-action@v2.1.1
+      - name: molecule
+        uses: robertdebock/molecule-action@6.0.1
         with:
-          yamllint_strict: false
-          yamllint_comment: true
-          yamllint_config_datapath: '{extends: relaxed, rules: {line-length: {max: 200}}}'
+          command: yamllint
   test:
     needs:
       - yamllint

@@ -1,6 +1,7 @@
 # Ansible Role: Containerd
 
 This Ansible Role automates the installation of Containerd on Linux systems.
+
 Inspired by @geerlingguy's [ansible-role-containerd](https://github.com/geerlingguy/ansible-role-containerd/).
 
 ## Requirements

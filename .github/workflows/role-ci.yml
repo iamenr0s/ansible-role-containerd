@@ -20,6 +20,7 @@ jobs:
         with:
           yamllint_strict: false
           yamllint_comment: true
+          yamllint_config_filepath: .yamllint
   test:
     needs:
       - yamllint

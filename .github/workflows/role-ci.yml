@@ -20,7 +20,6 @@ jobs:
         with:
           yamllint_strict: false
           yamllint_comment: true
-          yamllint_config_filepath: .yamllint
   test:
     needs:
       - yamllint
@@ -37,7 +36,7 @@ jobs:
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@6.0.0
+        uses: robertdebock/molecule-action@6.0.1
         with:
           image: "${{ matrix.image }}"
           options: parallel

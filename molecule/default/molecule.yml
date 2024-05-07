@@ -5,7 +5,7 @@ dependency:
   options:
     ignore-errors: true
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: instance
     image: "iamenr0s/docker-${MOLECULE_DISTRO:-rockylinux9}-ansible:latest"

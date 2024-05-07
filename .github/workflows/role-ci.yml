@@ -16,7 +16,7 @@ jobs:
         with:
           path: "${{ github.repository }}"
       - name: yamllint
-        uses: karancode/yamllint-github-action@master
+        uses: karancode/yamllint-github-action@v2.1.1
         with:
           yamllint_strict: false
           yamllint_comment: true

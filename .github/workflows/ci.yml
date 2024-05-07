@@ -42,7 +42,7 @@ jobs:
         distro:
           - almalinux9
           - rockylinux9
-          #- fedora39
+          - fedora39
 
     steps:
       - name: Check out the codebase.

@@ -2,10 +2,10 @@
 dependencies: []
 
 galaxy_info:
-  role_name: cri_o
+  role_name: containerd
   author: iamenr0s
   description: This Ansible Role automates the installation of containerd on Linux systems.
-  license: license (BSD, MIT)
+  license: This project is licensed under the MIT License.
   min_ansible_version: "2.10"
   platforms:
     - name: "EL"

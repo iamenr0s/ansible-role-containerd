@@ -48,6 +48,6 @@ None.
 
 ## License
 
-MIT / BSD
+This project is licensed under the MIT License.
 
 ## Author Information

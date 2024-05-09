@@ -10,8 +10,8 @@ platforms:
   - name: instance
     image: "iamenr0s/docker-${MOLECULE_DISTRO:-rockylinux9}-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:z
+    #volumes:
+    #  - /sys/fs/cgroup:/sys/fs/cgroup:z
     cgroupns_mode: host
     privileged: true
     pre_build_image: true

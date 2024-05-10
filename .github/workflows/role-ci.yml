@@ -8,7 +8,7 @@ name: Role-CI
       - main
 jobs:
   yamllint:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
   test:
     needs:
       - yamllint
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         image:

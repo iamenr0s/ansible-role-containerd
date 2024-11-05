@@ -1,4 +1,4 @@
-[![Molecule](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml) [![Release](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/release.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/release.yml) ![Ansible Role](https://img.shields.io/ansible/role/d/iamenr0s/ansible_role_containerd)
+[![Molecule](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml) [![Release](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/release.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/release.yml) ![Ansible Role](https://img.shields.io/ansible/role/d/iamenr0s/ansible_role_containerd) [![CodeFactor](https://www.codefactor.io/repository/github/iamenr0s/ansible-role-containerd/badge)](https://www.codefactor.io/repository/github/iamenr0s/ansible-role-containerd)
 
 # Ansible Role: Containerd
 

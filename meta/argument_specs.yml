@@ -41,10 +41,14 @@ argument_specs:
         type: bool
         default: false
       docker_yum_repo_url:
-        description: URL of the Docker CE yum/dnf repository file.
+        # No default listed here: the real default in defaults/main.yml is a
+        # Jinja expression over ansible_facts, and argument spec validation
+        # templates defaults before facts may exist.
+        description: >-
+          URL of the Docker CE yum/dnf repository file. Defaults to the
+          download.docker.com repo for fedora or centos depending on the
+          distribution.
         type: str
-        default: >-
-          https://download.docker.com/linux/{{ (ansible_facts['distribution'] == "Fedora") | ternary("fedora", "centos") }}/docker-ce.repo
       docker_yum_repo_enable_nightly:
         description: Enable the docker-ce-nightly repository ('0' or '1').
         type: str

@@ -30,6 +30,11 @@
     - name: Reset connection to pick up Python
       ansible.builtin.meta: reset_connection
 
+    # The role's os_family conditionals and repo-url default need facts;
+    # play-level gathering is off until Python is bootstrapped above.
+    - name: Gather facts
+      ansible.builtin.setup:
+
     # No module equivalent for is-system-running; the service module can't
     # tell whether systemd finished booting inside the container.
     - name: Wait for systemd to complete initialization

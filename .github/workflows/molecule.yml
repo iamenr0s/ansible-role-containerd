@@ -26,7 +26,7 @@ jobs:
       - name: Set up Python 3.
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: '3.14'
 
       - name: Install test dependencies.
         run: pip3 install yamllint
@@ -55,10 +55,15 @@ jobs:
           # almalinux8/rockylinux8 (EL8) have 3.6.8. Pin them to ansible-core
           # 2.16.x. Every other distro needs latest ansible for dnf5/libdnf5
           # support (e.g. Fedora 41+).
+          # ansible-core 2.16 also caps the *controller* Python: ansible-compat
+          # refuses to run it under Python 3.14+, so these legs pin the
+          # controller to 3.12 too, independent of the other legs' version.
           - distro: almalinux8
             ansible_pin: "ansible<10"
+            python_version: '3.12'
           - distro: rockylinux8
             ansible_pin: "ansible<10"
+            python_version: '3.12'
 
     steps:
       - name: Check out the codebase.
@@ -67,7 +72,7 @@ jobs:
       - name: Set up Python 3.
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python_version || '3.14' }}
 
       - name: Install test dependencies.
         run: pip3 install "${{ matrix.ansible_pin || 'ansible' }}" molecule molecule-plugins[docker] docker cryptography

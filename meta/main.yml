@@ -5,7 +5,9 @@ dependencies: []
 galaxy_info:
   role_name: ansible_role_containerd
   author: iamenr0s
-  description: This Ansible Role automates the installation of containerd on Linux systems.
+  description: >-
+    This Ansible Role automates the installation of containerd on RHEL-family
+    and Debian-family Linux systems.
   license: This project is licensed under the MIT License.
   min_ansible_version: "2.10"
   platforms:
@@ -13,14 +15,20 @@ galaxy_info:
       versions:
         - "8"
         - "9"
-    - name: "Rocky"
-      versions:
-        - "all"
+        - "10"
     - name: "Fedora"
       versions:
-        - "40"
-        - "41"
         - "42"
+        - "43"
+        - "44"
+    - name: "Debian"
+      versions:
+        - "bookworm"
+        - "trixie"
+    - name: "Ubuntu"
+      versions:
+        - "jammy"
+        - "noble"
   galaxy_tags:
     - system
     - containers

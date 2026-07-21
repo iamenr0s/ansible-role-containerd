@@ -3,14 +3,14 @@
 Ansible Role: Containerd
 ========================
 
-This role installs and configures [containerd](https://containerd.io/) from the Docker CE repository on RHEL-family (AlmaLinux/RockyLinux) and Fedora servers. It can write containerd's built-in default configuration and switch the cgroup driver to systemd, which is the recommended setup for Kubernetes nodes.
+This role installs and configures [containerd](https://containerd.io/) from the Docker CE repository on RHEL-family (AlmaLinux/RockyLinux), Fedora, and Debian-family (Debian/Ubuntu) servers. It can write containerd's built-in default configuration and switch the cgroup driver to systemd, which is the recommended setup for Kubernetes nodes.
 
 Inspired by @geerlingguy's [ansible-role-containerd](https://github.com/geerlingguy/ansible-role-containerd/).
 
 Features
 --------
-- Adds the Docker CE repository and GPG key (RedHat family).
-- Installs `containerd.io` and `container-selinux`.
+- Adds the Docker CE repository and GPG key (RedHat family and Debian family).
+- Installs `containerd.io`, plus `container-selinux` on RedHat-family hosts.
 - Manages the containerd service state and boot enablement.
 - Optionally writes containerd's default configuration to `/etc/containerd/config.toml`.
 - Optionally sets systemd as the cgroup driver (`SystemdCgroup = true`).
@@ -21,13 +21,17 @@ Requirements
 - Python 3 available on the managed hosts.
 - The `community.general` collection (used for repo file management):
   - `ansible-galaxy collection install community.general`
+- On Debian-family hosts, `python3-apt` is installed automatically by the role (required by
+  the `apt_repository` module) — no manual prerequisite needed.
 - Run with privilege escalation on real hosts: `become: true` is recommended.
 
 Supported Platforms
 -------------------
-- AlmaLinux 8, 9
-- Fedora 40, 41, 42
-- Rocky 8, 9
+- AlmaLinux 8, 9, 10
+- RockyLinux 8, 9, 10
+- Fedora 42, 43, 44
+- Debian 12, 13
+- Ubuntu 22.04, 24.04
 
 Role Variables
 --------------
@@ -42,6 +46,9 @@ Defined in `defaults/main.yml`:
 - `docker_yum_repo_url` (str): URL of the Docker CE yum/dnf repository file (default: derived from the distribution — `fedora` or `centos`).
 - `docker_yum_repo_enable_nightly` (str): Enable the docker-ce-nightly repository, `'0'` or `'1'` (default: `'0'`).
 - `docker_yum_gpg_key` (str): URL of the Docker GPG key (default: `https://download.docker.com/linux/centos/gpg`).
+- `docker_apt_gpg_key` (str): URL of the Docker GPG key for apt (default: derived from the distribution — `debian` or `ubuntu`).
+- `docker_apt_repo_url` (str): Base URL of the Docker CE apt repository (default: derived from the distribution — `debian` or `ubuntu`).
+- `docker_apt_repo_enable_nightly` (str): Enable the docker-ce-nightly apt component, `'0'` or `'1'` (default: `'0'`).
 
 Tags
 ----

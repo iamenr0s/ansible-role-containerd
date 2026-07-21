@@ -44,11 +44,17 @@ jobs:
         distro:
           - almalinux8
           - almalinux9
-          - fedora40
-          - fedora41
+          - almalinux10
+          - debian12
+          - debian13
           - fedora42
+          - fedora43
+          - fedora44
           - rockylinux8
           - rockylinux9
+          - rockylinux10
+          - ubuntu2204
+          - ubuntu2404
         include:
           # These legs ship a managed-node Python below ansible-core 2.17's floor
           # (module_utils/_internal uses positional-only params, Python 3.8+):

@@ -2,9 +2,14 @@
 
 # tasks file for ansible-role-containerd
 
-- name: Include OS specific tasks
+- name: Include RedHat specific tasks
   ansible.builtin.include_tasks: setup-RedHat.yml
   when: ansible_facts['os_family'] == 'RedHat'
+  tags: containerd
+
+- name: Include Debian specific tasks
+  ansible.builtin.include_tasks: setup-Debian.yml
+  when: ansible_facts['os_family'] == 'Debian'
   tags: containerd
 
 - name: Ensure containerd is installed

@@ -4,7 +4,8 @@ argument_specs:
   main:
     short_description: >-
       Installs and configures containerd from the Docker CE repository on
-      RHEL-family (AlmaLinux/RockyLinux/Fedora) hosts.
+      RHEL-family (AlmaLinux/RockyLinux/Fedora) and Debian-family
+      (Debian/Ubuntu) hosts.
     options:
       containerd_package:
         description: Package name to install.
@@ -57,3 +58,23 @@ argument_specs:
         description: URL of the Docker GPG key used to sign packages.
         type: str
         default: https://download.docker.com/linux/centos/gpg
+      docker_apt_gpg_key:
+        # No default listed here: the real default in defaults/main.yml is a
+        # Jinja expression over ansible_facts, and argument spec validation
+        # templates defaults before facts may exist.
+        description: >-
+          URL of the Docker GPG key used to sign apt packages. Defaults to
+          the download.docker.com key for the current distribution
+          (debian or ubuntu).
+        type: str
+      docker_apt_repo_url:
+        # No default listed here: same reason as docker_apt_gpg_key above.
+        description: >-
+          Base URL of the Docker CE apt repository. Defaults to the
+          download.docker.com repo for the current distribution (debian or
+          ubuntu).
+        type: str
+      docker_apt_repo_enable_nightly:
+        description: Enable the docker-ce-nightly apt component ('0' or '1').
+        type: str
+        default: '0'

@@ -1,4 +1,5 @@
 ---
+
 dependencies: []
 
 galaxy_info:
@@ -14,12 +15,12 @@ galaxy_info:
         - "9"
     - name: "Rocky"
       versions:
-        - "8.0"
-        - "9.0"
+        - "all"
     - name: "Fedora"
       versions:
-        - "38"
-        - "39"
+        - "40"
+        - "41"
+        - "42"
   galaxy_tags:
     - system
     - containers

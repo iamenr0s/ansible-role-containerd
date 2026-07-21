@@ -1,57 +1,110 @@
-[![Molecule](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml) [![Release](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/release.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/release.yml) ![Ansible Role](https://img.shields.io/ansible/role/d/iamenr0s/ansible_role_containerd) [![CodeFactor](https://www.codefactor.io/repository/github/iamenr0s/ansible-role-containerd/badge)](https://www.codefactor.io/repository/github/iamenr0s/ansible-role-containerd)
+[![Molecule](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml/badge.svg)](https://github.com/iamenr0s/ansible-role-containerd/actions/workflows/molecule.yml) ![Ansible Role](https://img.shields.io/ansible/role/d/iamenr0s/ansible_role_containerd) [![CodeFactor](https://www.codefactor.io/repository/github/iamenr0s/ansible-role-containerd/badge)](https://www.codefactor.io/repository/github/iamenr0s/ansible-role-containerd)
 
-# Ansible Role: Containerd
+Ansible Role: Containerd
+========================
 
-This Ansible Role automates the installation of Containerd on Linux systems.
+This role installs and configures [containerd](https://containerd.io/) from the Docker CE repository on RHEL-family (AlmaLinux/RockyLinux) and Fedora servers. It can write containerd's built-in default configuration and switch the cgroup driver to systemd, which is the recommended setup for Kubernetes nodes.
 
 Inspired by @geerlingguy's [ansible-role-containerd](https://github.com/geerlingguy/ansible-role-containerd/).
 
-## Requirements
+Features
+--------
+- Adds the Docker CE repository and GPG key (RedHat family).
+- Installs `containerd.io` and `container-selinux`.
+- Manages the containerd service state and boot enablement.
+- Optionally writes containerd's default configuration to `/etc/containerd/config.toml`.
+- Optionally sets systemd as the cgroup driver (`SystemdCgroup = true`).
+- Restarts containerd only when the configuration actually changes.
 
-None.
+Requirements
+------------
+- Python 3 available on the managed hosts.
+- The `community.general` collection (used for repo file management):
+  - `ansible-galaxy collection install community.general`
+- Run with privilege escalation on real hosts: `become: true` is recommended.
 
-## Role Variables
+Supported Platforms
+-------------------
+- AlmaLinux 8, 9
+- Fedora 40, 41, 42
+- Rocky 8, 9
 
-Available variables are listed below, along with default values (see `defaults/main.yml`):
+Role Variables
+--------------
+Defined in `defaults/main.yml`:
 
-    containerd_package: containerd.io
-    containerd_package_state: present
+- `containerd_package` (str): Package name to install (default: `containerd.io`).
+- `containerd_package_state` (str): Package state, `present` or `latest` (default: `present`).
+- `containerd_service_state` (str): Service state, `started` or `stopped` (default: `started`).
+- `containerd_service_enabled` (bool): Enable the service at boot (default: `true`).
+- `containerd_config_default_write` (bool): Write containerd's default configuration to `/etc/containerd/config.toml` (default: `true`).
+- `containerd_config_cgroup_driver_systemd` (bool): Set systemd as the cgroup driver in config.toml; only used with `containerd_config_default_write: true` (default: `false`).
+- `docker_yum_repo_url` (str): URL of the Docker CE yum/dnf repository file (default: derived from the distribution — `fedora` or `centos`).
+- `docker_yum_repo_enable_nightly` (str): Enable the docker-ce-nightly repository, `'0'` or `'1'` (default: `'0'`).
+- `docker_yum_gpg_key` (str): URL of the Docker GPG key (default: `https://download.docker.com/linux/centos/gpg`).
 
-Package name and state controls.
+Tags
+----
+All tasks are tagged `containerd`, allowing selective runs:
+- `ansible-playbook ... --tags containerd`
+- `ansible-playbook ... --skip-tags containerd`
 
-    containerd_service_state: started
-    containerd_service_enabled: true
+Dependencies
+------------
+- Collections: `community.general`.
+- Role dependencies: none.
 
-Service controls. You can install containerd but not have it running or enabled on boot by changing these defaults.
-
-    containerd_config_default_write: true
-
-Write containerd defaults to the containerd config.toml file.
-
-    containerd_config_cgroup_driver_systemd: false
-
-Set systemd as cgroup driver in config.toml. Only valid with `containerd_config_default_write: true`
-
-    docker_yum_repo_url: https://download.docker.com/linux/{{ (ansible_distribution == "Fedora") | ternary("fedora","centos") }}/docker-ce.repo
-    docker_yum_repo_enable_nightly: '0'
-    docker_yum_gpg_key: https://download.docker.com/linux/centos/gpg
-
-Yum/DNF installation parameters, useful if you want to switch from the stable repository.
-
-## Dependencies
-
-None.
-
-## Example Playbook
+Example Playbook
+----------------
+Basic install with defaults:
 
 ```yaml
 - hosts: all
+  become: true
   roles:
-    - iamenr0s.ansible_role_containerd
+    - role: iamenr0s.ansible_role_containerd
 ```
 
-## License
+Kubernetes node setup (systemd cgroup driver):
 
+```yaml
+- hosts: all
+  become: true
+  vars:
+    containerd_config_default_write: true
+    containerd_config_cgroup_driver_systemd: true
+  roles:
+    - role: iamenr0s.ansible_role_containerd
+```
+
+Contributing & Security
+-----------------------
+- Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+- Report vulnerabilities privately per [SECURITY.md](SECURITY.md); do not open public issues for them.
+
+CI & Release (maintainers)
+--------------------------
+A single workflow (`.github/workflows/molecule.yml`) runs lint and the full Molecule distro matrix on pushes to `main`, PRs, and `v*` tags. On `v*` tags, a `release` job publishes to Ansible Galaxy after all tests pass.
+
+The Galaxy API key lives in the `galaxy` GitHub environment, which only `v*` tags may target. One-time setup:
+
+```bash
+# Galaxy publishing key (environment-scoped, get it from galaxy.ansible.com/ui/token)
+gh secret set GALAXY_API_KEY --env galaxy --repo iamenr0s/ansible-role-containerd
+
+# Code scanning notifications (Slack webhook URL; for Discord append /slack to the webhook URL)
+gh secret set SECURITY_ALERT_WEBHOOK --env galaxy --repo iamenr0s/ansible-role-containerd
+```
+
+`.github/workflows/code-scanning-notify.yml` polls the code-scanning API every 6 hours and posts new or updated open alerts to that webhook (GitHub Actions cannot trigger on `code_scanning_alert` directly).
+
+To release: tag a commit `vX.Y.Z` and push the tag — CI gates the Galaxy publish.
+
+License
+-------
 This project is licensed under the MIT License.
 
-## Author Information
+Author Information
+------------------
+Author: iamenr0s
+Galaxy: `iamenr0s.ansible_role_containerd`

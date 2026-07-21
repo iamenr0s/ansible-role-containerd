@@ -1,0 +1,48 @@
+---
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  become: false
+
+  vars_files:
+    - ../../defaults/main.yml
+
+  tasks:
+    - name: Verify | Check containerd binary reports a version
+      ansible.builtin.command:
+        cmd: containerd --version
+      register: __verify_containerd_version
+      changed_when: false
+
+    - name: Verify | Assert containerd version output looks sane
+      ansible.builtin.assert:
+        that:
+          - __verify_containerd_version.rc == 0
+          - "'containerd' in __verify_containerd_version.stdout"
+        fail_msg: "containerd binary missing or broken: {{ __verify_containerd_version.stdout }}"
+
+    - name: Verify | Collect service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify | Assert service state matches role defaults
+      ansible.builtin.assert:
+        that:
+          - ansible_facts['services']['containerd.service']['state'] == 'running'
+          - ansible_facts['services']['containerd.service']['status'] == 'enabled'
+        fail_msg: >-
+          containerd service state mismatch:
+          {{ ansible_facts['services']['containerd.service'] | default('service not found') }}
+
+    - name: Verify | Stat the generated config.toml
+      ansible.builtin.stat:
+        path: /etc/containerd/config.toml
+      register: __verify_containerd_config
+
+    - name: Verify | Assert config.toml was written when default write is enabled
+      ansible.builtin.assert:
+        that:
+          - __verify_containerd_config.stat.exists
+          - __verify_containerd_config.stat.size > 0
+        fail_msg: /etc/containerd/config.toml is missing or empty
+      when: containerd_config_default_write | bool

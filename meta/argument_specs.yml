@@ -1,0 +1,55 @@
+---
+
+argument_specs:
+  main:
+    short_description: >-
+      Installs and configures containerd from the Docker CE repository on
+      RHEL-family (AlmaLinux/RockyLinux/Fedora) hosts.
+    options:
+      containerd_package:
+        description: Package name to install.
+        type: str
+        default: containerd.io
+      containerd_package_state:
+        description: State of the containerd package.
+        type: str
+        choices:
+          - present
+          - latest
+        default: present
+      containerd_service_state:
+        description: Desired state of the containerd service.
+        type: str
+        choices:
+          - started
+          - stopped
+        default: started
+      containerd_service_enabled:
+        description: Whether the containerd service is enabled at boot.
+        type: bool
+        default: true
+      containerd_config_default_write:
+        description: >-
+          Write containerd's built-in default configuration to
+          /etc/containerd/config.toml.
+        type: bool
+        default: true
+      containerd_config_cgroup_driver_systemd:
+        description: >-
+          Set systemd as the cgroup driver in config.toml. Only used when
+          containerd_config_default_write is true.
+        type: bool
+        default: false
+      docker_yum_repo_url:
+        description: URL of the Docker CE yum/dnf repository file.
+        type: str
+        default: >-
+          https://download.docker.com/linux/{{ (ansible_facts['distribution'] == "Fedora") | ternary("fedora", "centos") }}/docker-ce.repo
+      docker_yum_repo_enable_nightly:
+        description: Enable the docker-ce-nightly repository ('0' or '1').
+        type: str
+        default: '0'
+      docker_yum_gpg_key:
+        description: URL of the Docker GPG key used to sign packages.
+        type: str
+        default: https://download.docker.com/linux/centos/gpg
